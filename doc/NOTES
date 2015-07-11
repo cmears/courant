@@ -1,0 +1,14 @@
+A "run" has the following components:
+ * zero or more segments
+ * timestamp (when the run started)
+ * a unique identifier
+
+A "segment" is a sequence of samples.
+
+A "sample" has:
+ * location (long/lat)
+ * timestamp
+ * bearing
+ * speed
+ * accuracy
+
