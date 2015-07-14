@@ -54,7 +54,7 @@ public class RunService extends Service {
             public void onProviderEnabled(String provider) {}
             public void onProviderDisabled(String provider) {}
         };
-        locMan.requestLocationUpdates(LocationManager.GPS_PROVIDER, 3 * 1000, 0, locListener);
+        locMan.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100, 0, locListener);
 
         return START_STICKY;
     }
