@@ -14,12 +14,16 @@ import java.util.UUID;
 public class Run {
     LinkedList<Segment> segments;
     UUID uuid;
+    long startTime;
 
     public Run() {
         uuid = UUID.randomUUID();
         segments = new LinkedList<>();
         newSegment();
+        startTime = System.currentTimeMillis();
     }
+
+    public long startTime() { return startTime; }
 
     public void newLocation(Location loc) {
         segments.getLast().newLocation(loc);

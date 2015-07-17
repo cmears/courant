@@ -145,6 +145,11 @@ public class RunInProgressActivity extends Activity implements ServiceConnection
             ((TextView) findViewById(R.id.totalDisplacement)).setText(Double.toString(totalDisplacement));
             ((TextView) findViewById(R.id.totalDistance)).setText(Double.toString(totalDistance));
 
+            long startTime = run.startTime();
+            long now = System.currentTimeMillis();
+            long duration = now - startTime;
+            ((TextView) findViewById(R.id.runningTime)).setText(Long.toString(duration));
+
             if (readyToTalk && willingToTalk) {
                 BigDecimal bd = (new BigDecimal(latestSpeed)).setScale(1, RoundingMode.HALF_UP);
                 tts.speak(bd.toPlainString(), TextToSpeech.QUEUE_FLUSH, null, "speed");
@@ -164,7 +169,7 @@ public class RunInProgressActivity extends Activity implements ServiceConnection
             Set<Voice> voices = tts.getVoices();
             Voice bestVoice = null;
             for (Voice v : voices) {
-                if (v.getName().equals("fr_FR"))
+                if (v.getName().equals("en_GB"))
                     bestVoice = v;
             }
             if (bestVoice != null)
@@ -205,7 +210,7 @@ class ChartView extends View {
                 int start = Math.max(0, n - 100);
                 int i = 0;
                 while (start+i < n - 1) {
-                    canvas.drawLine(5*i, 200-2*seg.samples.get(start+i).loc.getSpeed()*3.6f, 5*(i + 1), 200-2*seg.samples.get(start+i + 1).loc.getSpeed()*3.6f, red);
+                    canvas.drawLine(5*i, 200-2*seg.samples.get(start+i).getSpeed()*3.6f, 5*(i + 1), 200-2*seg.samples.get(start+i + 1).getSpeed()*3.6f, red);
                     i++;
                 }
             }

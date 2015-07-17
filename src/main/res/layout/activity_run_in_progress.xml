@@ -67,6 +67,11 @@
         android:layout_height="wrap_content"
         android:id="@+id/totalDisplacement" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/runningTime" />
+
     </LinearLayout>
 
 </RelativeLayout>
