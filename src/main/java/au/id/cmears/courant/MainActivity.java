@@ -4,29 +4,49 @@ import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
 import java.util.List;
 
 public class MainActivity extends Activity
 {
     /** Called when the activity is first created. */
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         Log.d("MainActivity", "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
         List<Run> runs = RunStorage.getRuns(this);
         LinearLayout runList = (LinearLayout) findViewById(R.id.run_list);
+
+        // Get the directory for the user's public pictures directory.
+        File file = new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES), "courant-running");
+        if (!file.mkdirs()) {
+            Log.e("MainAct", "Directory not created");
+        }
+
+        PrintWriter fos = null;
+        try {
+            fos = new PrintWriter(file.toString() + "/" + "output");
+        } catch (FileNotFoundException e) {
+            Log.e("MainAct", "file not found");
+        }
+
         for (Run r : runs) {
             TextView t = new TextView(this);
             t.setText(r.uuidString());
             runList.addView(t);
+            fos.println(r.toJSON());
         }
         Log.d("MainActivity", "runs: " + runs.toString());
     }

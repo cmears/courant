@@ -45,8 +45,11 @@ public class RunStorage {
             while (!cursor.isAfterLast()) {
                 int colIdx = cursor.getColumnIndex("json");
                 String js = cursor.getString(colIdx);
+                Log.d("RunStorage", js);
                 JSONObject j = new JSONObject(js);
+                Log.d("RunStorage", j.toString());
                 Run run = new Run(j);
+                Log.d("RunStorage", run.toJSON().toString());
                 list.add(run);
                 cursor.moveToNext();
             }

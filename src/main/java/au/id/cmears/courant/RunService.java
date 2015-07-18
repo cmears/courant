@@ -73,7 +73,7 @@ public class RunService extends Service implements TextToSpeech.OnInitListener {
                 tts.speak(Long.toString(thisMinute) + " minutes passed", TextToSpeech.QUEUE_FLUSH, null, "time");
                 previousMinuteUpdate = thisMinute;
                 previousSpeedUpdate = now;
-            } else if (timeSinceLastSpeedUpdate > 5000) {
+            } else if (timeSinceLastSpeedUpdate > 15000) {
                 if (latestSpeed != null) {
                     BigDecimal bd = (new BigDecimal(latestSpeed)).setScale(1, RoundingMode.HALF_UP);
                     tts.speak(bd.toPlainString(), TextToSpeech.QUEUE_FLUSH, null, "speed");

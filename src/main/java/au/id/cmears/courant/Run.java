@@ -1,6 +1,7 @@
 package au.id.cmears.courant;
 
 import android.location.Location;
+import android.util.Log;
 import android.util.Pair;
 
 import org.json.JSONArray;
@@ -56,6 +57,7 @@ public class Run {
             json.put("segments", segmentArray);
             return json;
         } catch (JSONException e) {
+            Log.d("Run", e.toString());
             return null;
         }
     }
@@ -187,6 +189,7 @@ class Segment {
                 sampleArray.put(s.toJSON());
             json.put("samples", sampleArray);
         } catch (Exception e) {
+            Log.e("Segment", e.toString());
             return null;
         }
         return json;
@@ -220,6 +223,7 @@ class Sample {
             json.put("time", loc.getTime());
             return json;
         } catch (Exception e) {
+            Log.e("Sample", e.toString());
             return null;
         }
     }
@@ -233,6 +237,7 @@ class Sample {
         if (json.has("bearing")) l.setBearing((float) json.getDouble("bearing"));
         if (json.has("accuracy")) l.setAccuracy((float) json.getDouble("accuracy"));
         if (json.has("speed")) l.setSpeed((float)json.getDouble("speed"));
+        loc = l;
     }
 
     public Float getBearing() {
