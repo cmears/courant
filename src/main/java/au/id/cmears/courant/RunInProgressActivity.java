@@ -26,16 +26,12 @@ import java.math.RoundingMode;
 import java.util.Set;
 
 
-public class RunInProgressActivity extends Activity implements ServiceConnection, TextToSpeech.OnInitListener {
+public class RunInProgressActivity extends Activity implements ServiceConnection {
 
     RunService runService;
     Run run;
     Handler handler;
     boolean tryToUpdate;
-
-    boolean readyToTalk;
-    boolean willingToTalk;
-    TextToSpeech tts;
 
     ChartView speedChart;
 
@@ -78,9 +74,6 @@ public class RunInProgressActivity extends Activity implements ServiceConnection
         tryToUpdate = true;
         handler = new Handler();
         handler.postDelayed(new UpdateRun(), 100);
-        readyToTalk = false;
-        willingToTalk = false;
-        tts = new TextToSpeech(this, this);
         super.onStart();
     }
 
@@ -96,12 +89,10 @@ public class RunInProgressActivity extends Activity implements ServiceConnection
 
     public void onStop() {
         unbindService(this);
-        tts.shutdown();
         super.onStop();
     }
 
     public void stopRun(View view) {
-        willingToTalk = false;
         updateRun();
         tryToUpdate = false;
         recordRun();
@@ -110,13 +101,14 @@ public class RunInProgressActivity extends Activity implements ServiceConnection
     }
 
     public void toggleChatty(View view) {
-        if (willingToTalk) {
-            willingToTalk = false;
-            ((Button) findViewById(R.id.toggleChatty)).setText("be chatty");
-        } else {
-            willingToTalk = true;
-            ((Button) findViewById(R.id.toggleChatty)).setText("be quiet");
-        }
+        return;
+//        if (willingToTalk) {
+//            willingToTalk = false;
+//            ((Button) findViewById(R.id.toggleChatty)).setText("be chatty");
+//        } else {
+//            willingToTalk = true;
+//            ((Button) findViewById(R.id.toggleChatty)).setText("be quiet");
+//        }
     }
 
     public void updateRun() {
@@ -129,19 +121,19 @@ public class RunInProgressActivity extends Activity implements ServiceConnection
             info.setText(Integer.toString(numSamples));
 
             Pair<Double,Double> latestPosition = run.latestPosition();
-            double latestSpeed = run.latestSpeed();
-            double latestBearing = run.latestBearing();
-            double latestAccuracy = run.latestAccuracy();
-            double latestAverageSpeed = run.latestAverageSpeed();
+            Float latestSpeed = run.latestSpeed();
+            Float latestBearing = run.latestBearing();
+            Float latestAccuracy = run.latestAccuracy();
+            Float latestAverageSpeed = run.latestAverageSpeed();
             double totalDistance = run.totalDistance();
             double totalDisplacement = run.totalDisplacement();
 
             if (latestPosition != null) ((TextView) findViewById(R.id.latestPosition)).
                     setText(Double.toString(latestPosition.first) + " / " + Double.toString(latestPosition.second));
-            if (latestSpeed != -1) ((TextView) findViewById(R.id.latestSpeed)).setText(Double.toString(latestSpeed));
-            if (latestBearing != -1) ((TextView) findViewById(R.id.latestBearing)).setText(Double.toString(latestBearing));
-            if (latestAccuracy != -1) ((TextView) findViewById(R.id.latestAccuracy)).setText(Double.toString(latestAccuracy));
-            if (latestAverageSpeed != -1) ((TextView) findViewById(R.id.latestAverageSpeed)).setText(Double.toString(latestAverageSpeed));
+            if (latestSpeed != null) ((TextView) findViewById(R.id.latestSpeed)).setText(Double.toString(latestSpeed));
+            if (latestBearing != null) ((TextView) findViewById(R.id.latestBearing)).setText(Double.toString(latestBearing));
+            if (latestAccuracy != null) ((TextView) findViewById(R.id.latestAccuracy)).setText(Double.toString(latestAccuracy));
+            if (latestAverageSpeed != null) ((TextView) findViewById(R.id.latestAverageSpeed)).setText(Double.toString(latestAverageSpeed));
             ((TextView) findViewById(R.id.totalDisplacement)).setText(Double.toString(totalDisplacement));
             ((TextView) findViewById(R.id.totalDistance)).setText(Double.toString(totalDistance));
 
@@ -150,30 +142,11 @@ public class RunInProgressActivity extends Activity implements ServiceConnection
             long duration = now - startTime;
             ((TextView) findViewById(R.id.runningTime)).setText(Long.toString(duration));
 
-            if (readyToTalk && willingToTalk) {
-                BigDecimal bd = (new BigDecimal(latestSpeed)).setScale(1, RoundingMode.HALF_UP);
-                tts.speak(bd.toPlainString(), TextToSpeech.QUEUE_FLUSH, null, "speed");
-            }
-
             speedChart.setRun(run);
             speedChart.invalidate();
 
         } else {
             Log.d("RIPA", "not bound");
-        }
-    }
-
-    public void onInit(int status) {
-        if (status == TextToSpeech.SUCCESS) {
-            readyToTalk = true;
-            Set<Voice> voices = tts.getVoices();
-            Voice bestVoice = null;
-            for (Voice v : voices) {
-                if (v.getName().equals("en_GB"))
-                    bestVoice = v;
-            }
-            if (bestVoice != null)
-                tts.setVoice(bestVoice);
         }
     }
 

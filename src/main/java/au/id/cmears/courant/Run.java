@@ -98,10 +98,10 @@ public class Run {
         return samp.getAccuracy();
     }
 
-    public double latestAverageSpeed() {
+    public Float latestAverageSpeed() {
         Segment seg = segments.getLast();
-        if (seg == null) return -1;
-        if (seg.samples.size() < 2) return -1;
+        if (seg == null) return null;
+        if (seg.samples.size() < 2) return null;
         Sample samp1 = seg.samples.get(seg.samples.size()-2);
         Sample samp2 = seg.samples.get(seg.samples.size()-1);
         float dist = samp1.distanceTo(samp2);
