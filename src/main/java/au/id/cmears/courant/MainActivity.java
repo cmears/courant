@@ -10,10 +10,16 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 
 public class MainActivity extends Activity
@@ -48,7 +54,8 @@ public class MainActivity extends Activity
             runList.addView(t);
             fos.println(r.toJSON());
         }
-        Log.d("MainActivity", "runs: " + runs.toString());
+        //Log.d("MainActivity", "runs: " + runs.toString());
+        fos.close();
     }
 
     public void onStart() {
@@ -89,6 +96,22 @@ public class MainActivity extends Activity
         ComponentName name = startService(intent);
         if (name == null) {
             Log.d("MainActivity", "Tried to start service but it failed");
+        }
+    }
+
+    public void uploadAllRuns(View view) throws IOException {
+        List<Run> runs = RunStorage.getRuns(this);
+        URL url = new URL("https://courant.cmears.id.au/postrun");
+        for (Run r : runs) {
+            HttpURLConnection c = (HttpURLConnection) url.openConnection();
+            try {
+                OutputStream os = new BufferedOutputStream(c.getOutputStream());
+                os.write(r.toJSON().toString().getBytes());
+            } catch (MalformedURLException e) {
+                // impossible
+            } finally {
+                c.disconnect();
+            }
         }
     }
 }

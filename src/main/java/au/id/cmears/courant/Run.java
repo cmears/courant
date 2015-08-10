@@ -232,7 +232,7 @@ class Sample {
         Location l = new Location("gps");
         l.setLatitude(json.getDouble("latitude"));
         l.setLongitude(json.getDouble("longitude"));
-        l.setTime(json.getInt("time"));
+        l.setTime(json.getLong("time"));
         if (json.has("altitude")) l.setAltitude(json.getDouble("altitude"));
         if (json.has("bearing")) l.setBearing((float) json.getDouble("bearing"));
         if (json.has("accuracy")) l.setAccuracy((float) json.getDouble("accuracy"));

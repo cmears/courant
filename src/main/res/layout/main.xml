@@ -16,4 +16,10 @@
         android:orientation="vertical"
         android:id="@+id/run_list">
     </LinearLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Upload all runs"
+        android:onClick="uploadAllRuns" />
 </LinearLayout>
