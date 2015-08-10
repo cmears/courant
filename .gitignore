@@ -3,3 +3,8 @@ build/
 .gradle/
 .idea/
 courant.iml
+.stack-work
+*.ghcihi
+*.ghcio
+*.hi
+*.o

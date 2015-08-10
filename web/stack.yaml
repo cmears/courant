@@ -1,0 +1,5 @@
+flags: {}
+packages:
+- '.'
+extra-deps: [gps-1.2]
+resolver: lts-2.16

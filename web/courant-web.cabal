@@ -1,0 +1,71 @@
+name:                courant-web
+version:             0.1.0.0
+synopsis:            Initial project template from stack
+description:         Please see README.md
+homepage:            http://github.com/name/project
+license:             BSD3
+license-file:        LICENSE
+author:              Your name here
+maintainer:          your.address@example.com
+-- copyright:           
+category:            Web
+build-type:          Simple
+-- extra-source-files:  
+cabal-version:       >=1.10
+
+library
+--  hs-source-dirs:      src
+--  exposed-modules:     Lib
+  build-depends:       base >= 4.7 && < 5
+  default-language:    Haskell2010
+
+executable courant-web
+  -- hs-source-dirs:      app
+  main-is:             Run.hs
+  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+  build-depends:       base,
+                       aeson,
+                       bytestring,
+                       vector,
+                       gps,
+                       time
+  default-language:    Haskell2010
+
+executable courant-json
+  main-is:             Web.hs
+  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+  build-depends:       aeson
+                     , base
+                     , bytestring
+                     , conduit
+                     , conduit-extra
+                     , gps
+                     , http-client
+                     , http-conduit
+                     , http-types
+                     , lifted-base
+                     , monad-logger
+                     , persistent-sqlite
+                     , resourcet
+                     , text
+                     , time
+                     , transformers
+                     , vector
+                     , wai
+                     , wai-conduit
+                     , warp
+                     , yesod
+  default-language:    Haskell2010
+
+-- test-suite new-template-test
+--   type:                exitcode-stdio-1.0
+--   hs-source-dirs:      test
+--   main-is:             Spec.hs
+--   build-depends:       base
+--                      , new-template
+--   ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+--   default-language:    Haskell2010
+
+-- source-repository head
+--   type:     git
+--   location: https://github.com/name/project
