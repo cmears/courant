@@ -53,6 +53,7 @@ data Sample = Sample {
     , sampleBearing :: Maybe Double
     , sampleSpeed :: Maybe Double
     , sampleAltitude :: Maybe Double
+    , sampleDistance :: Maybe Double
     }
   deriving (Show)
 
@@ -65,6 +66,7 @@ instance FromJSON Sample where
            <*> v .:? "bearing"
            <*> v .:? "speed"
            <*> v .:? "altitude"
+           <*> v .:? "distance"
 
 instance ToJSON Sample where
   toJSON sample =
@@ -75,6 +77,7 @@ instance ToJSON Sample where
             , "bearing" .? sampleBearing sample
             , "speed" .? sampleSpeed sample
             , "altitude" .? sampleAltitude sample
+            , "distance" .? sampleDistance sample
             ]
 
 object' = object . catMaybes
@@ -157,8 +160,13 @@ smoothSamples (s:ss) =
                             , sampleBearing = Nothing
                             , sampleSpeed = Just bucketSpeed
                             , sampleAltitude = Nothing
+                            , sampleDistance = Just bucketDistance
                             }
-  in bucketSample : smoothSamples rest
+  -- The last sample in this bucket ends up as the first sample of the
+  -- next bucket.
+  in if null rest
+     then [bucketSample]
+     else bucketSample : smoothSamples (last thisBucket : rest)
 
 crapDistance :: Sample -> Sample -> Double
 crapDistance s1 s2 =
@@ -187,6 +195,7 @@ pointToSample p =
          , sampleBearing = Nothing
          , sampleSpeed = Nothing
          , sampleAccuracy = Nothing
+         , sampleDistance = Nothing
          }
 
 epochMillisecondsToUTC :: Integer -> UTCTime
