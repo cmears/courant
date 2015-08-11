@@ -57,7 +57,12 @@ getGetRunR desiredUuid = do
   addHeader "Access-Control-Allow-Origin" "*"
   case maybeRunEntity of
     Nothing -> error "no such run"
-    Just runEntity -> respond typeJson (runEntryJson $ entityVal runEntity)
+    Just runEntity ->
+        let originalJson = runEntryJson $ entityVal runEntity
+            Just originalRun = decodeStrict $ T.encodeUtf8 $ T.pack originalJson
+            smoothedRun = smoothRun originalRun
+            smoothedJson = encode smoothedRun
+        in respond typeJson smoothedJson
 
 postPostRunR :: Handler String
 postPostRunR = do
