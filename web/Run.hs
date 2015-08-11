@@ -134,6 +134,9 @@ smoothSegment2 seg =
       trail2 = GPS.smoothRests trail
   in seg { segmentSamples = V.fromList (map pointToSample trail2) }
 
+smoothRun :: Run -> Run
+smoothRun run = run { runSegments = V.map smoothSegment (runSegments run) }
+
 smoothSegment :: Segment -> Segment
 smoothSegment seg =
   seg { segmentSamples = V.fromList (smoothSamples (V.toList (segmentSamples seg))) }
