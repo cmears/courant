@@ -127,8 +127,10 @@ public class MainActivity extends Activity
                     PrintWriter out = new PrintWriter(c.getOutputStream());
                     out.print(postParams);
                     out.close();
+                    // Get the response code to ensure that the POST is complete.
+                    int responseCode = c.getResponseCode();
                     Log.d("Upload", "wrote bytes");
-                    Log.d("Upload", "response: " + c.getResponseCode());
+                    Log.d("Upload", "response: " + responseCode);
                 } catch (MalformedURLException e) {
                     Log.d("Upload", "impossible: malformed url: " + e);
                 } finally {
